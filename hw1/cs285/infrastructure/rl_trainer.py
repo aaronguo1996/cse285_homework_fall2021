@@ -41,7 +41,7 @@ class RL_Trainer(object):
 
         # Make the gym environment
         self.env = gym.make(self.params['env_name'])
-        self.env.seed(seed)
+        self.env.reset(seed=seed)
 
         # Maximum length for episodes
         self.params['ep_len'] = self.params['ep_len'] or self.env.spec.max_episode_steps
@@ -61,7 +61,7 @@ class RL_Trainer(object):
         if 'model' in dir(self.env):
             self.fps = 1/self.env.model.opt.timestep
         else:
-            self.fps = self.env.env.metadata['video.frames_per_second']
+            self.fps = self.env.env.metadata['render_fps']
 
         #############
         ## AGENT
