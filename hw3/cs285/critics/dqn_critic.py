@@ -75,8 +75,8 @@ class DQNCritic(BaseCritic):
             # is being updated, but the Q-value for this action is obtained from the
             # target Q-network. Please review Lecture 8 for more details,
             # and page 4 of https://arxiv.org/pdf/1509.06461.pdf is also a good reference.
-            q_tp1 = reward_n + self.gamma * q_t_values * (not terminal_n)
-            q_t_values = qa_tp1_values
+            best_ac = self.q_net(next_ob_no).argmax(dim=1)
+            q_tp1 = qa_tp1_values[:,best_ac]
         else:
             q_tp1, _ = qa_tp1_values.max(dim=1)
 

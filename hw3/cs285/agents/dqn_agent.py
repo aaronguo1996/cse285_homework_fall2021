@@ -33,7 +33,10 @@ class DQNAgent(object):
         self.num_param_updates = 0
 
     def add_to_replay_buffer(self, paths):
-        pass
+        if paths is not None:
+            for p in paths:
+                self.replay_buffer_idx = self.replay_buffer.store_frame(p["observation"])
+                self.replay_buffer.store_effect(self.replay_buffer_idx, p["action"], p["reward"], p["terminal"])
 
     def step_env(self):
         """
