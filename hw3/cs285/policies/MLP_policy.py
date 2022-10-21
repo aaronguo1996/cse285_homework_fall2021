@@ -92,9 +92,8 @@ class MLPPolicy(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             observation = obs[None]
         
         action_dist = self.forward(ptu.from_numpy(observation))
-        action = action_dist.sample()
-        # TODO: do we need to change the size here?
-        return ptu.to_numpy(action)
+        action = ptu.to_numpy(action_dist.sample())
+        return action
 
     # update/train this policy
     def update(self, observations, actions, **kwargs):

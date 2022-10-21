@@ -33,10 +33,7 @@ class DQNAgent(object):
         self.num_param_updates = 0
 
     def add_to_replay_buffer(self, paths):
-        if paths is not None:
-            for p in paths:
-                self.replay_buffer_idx = self.replay_buffer.store_frame(p["observation"])
-                self.replay_buffer.store_effect(self.replay_buffer_idx, p["action"], p["reward"], p["terminal"])
+        pass
 
     def step_env(self):
         """
@@ -56,11 +53,7 @@ class DQNAgent(object):
             # take random action 
             # with probability eps (see np.random.random())
             # OR if your current step number (see self.t) is less that self.learning_starts
-            action = np.random.randint(self.num_actions, size=self.last_obs.shape[-1])
-            # print(self.replay_buffer.obs.shape)
-            # (1000000, 84, 84, 1)
-            # print(self.replay_buffer.frame_history_len)
-            # 4
+            action = self.env.action_space.sample()
         else:
             # Your actor will take in multiple previous observations ("frames") in order
             # to deal with the partial observability of the environment. Get the most recent 
@@ -69,8 +62,7 @@ class DQNAgent(object):
             action = self.actor.get_action(self.replay_buffer.encode_recent_observation())
         
         # take a step in the environment using the action from the policy
-        obs, reward, done, _ = self.env.step(action)
-        self.last_obs = obs
+        self.last_obs, reward, done, _ = self.env.step(action)
 
         # store the result of taking this action into the replay buffer
         self.replay_buffer.store_effect(self.replay_buffer_idx, action, reward, done)
